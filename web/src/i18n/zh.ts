@@ -206,6 +206,7 @@ export const zh: Translations = {
       memory: "记忆",
       compression: "压缩",
       security: "安全",
+      gateway: "网关",
       browser: "浏览器",
       voice: "语音",
       tts: "文字转语音",

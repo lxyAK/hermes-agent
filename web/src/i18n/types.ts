@@ -215,6 +215,7 @@ export interface Translations {
       memory: string;
       compression: string;
       security: string;
+      gateway: string;
       browser: string;
       voice: string;
       tts: string;

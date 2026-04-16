@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectOption } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
+import { Button } from "@/components/ui/button";
 
 function FieldHint({ schema, schemaKey }: { schema: Record<string, unknown>; schemaKey: string }) {
   const keyPath = schemaKey.includes(".") ? schemaKey : "";
@@ -110,6 +112,80 @@ export function AutoField({
           }
           placeholder="comma-separated values"
         />
+      </div>
+    );
+  }
+
+  if (schema.type === "map_list") {
+    const map = (value as Record<string, string[]>) ?? {};
+    const entries = Object.entries(map);
+    const [newPlatform, setNewPlatform] = useState("");
+    return (
+      <div className="grid gap-1.5">
+        <Label className="text-sm">{label}</Label>
+        <FieldHint schema={schema} schemaKey={schemaKey} />
+        {entries.map(([platform, cmds]) => (
+          <div key={platform} className="flex gap-2 items-center">
+            <span className="text-xs font-mono w-24 shrink-0 truncate" title={platform}>
+              {platform}
+            </span>
+            <Input
+              value={Array.isArray(cmds) ? cmds.join(", ") : String(cmds ?? "")}
+              onChange={(e) =>
+                onChange({
+                  ...map,
+                  [platform]: e.target.value
+                    .split(",")
+                    .map((s) => s.trim())
+                    .filter(Boolean),
+                })
+              }
+              placeholder="comma-separated commands"
+              className="text-xs"
+            />
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-7 px-2 text-xs text-destructive"
+              onClick={() => {
+                const next = { ...map };
+                delete next[platform];
+                onChange(next);
+              }}
+            >
+              ✕
+            </Button>
+          </div>
+        ))}
+        <div className="flex gap-2 items-center mt-1">
+          <Input
+            value={newPlatform}
+            onChange={(e) => setNewPlatform(e.target.value)}
+            placeholder="platform name"
+            className="text-xs w-36"
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && newPlatform.trim()) {
+                e.preventDefault();
+                onChange({ ...map, [newPlatform.trim()]: [] });
+                setNewPlatform("");
+              }
+            }}
+          />
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-7 px-2 text-xs"
+            disabled={!newPlatform.trim()}
+            onClick={() => {
+              if (newPlatform.trim()) {
+                onChange({ ...map, [newPlatform.trim()]: [] });
+                setNewPlatform("");
+              }
+            }}
+          >
+            Add platform
+          </Button>
+        </div>
       </div>
     );
   }

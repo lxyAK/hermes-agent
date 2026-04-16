@@ -572,6 +572,18 @@ platform_toolsets:
 #     extra:
 #       disable_link_previews: false  # Set true to suppress Telegram URL previews in bot messages
 
+# =============================================================================
+# Gateway Command Control
+# =============================================================================
+# Disable specific slash commands globally or per-platform.
+# Messaging platforms only — CLI is unaffected.
+#
+# gateway:
+#   disabled_commands: ["yolo", "fast"]       # globally disabled for all platforms
+#   platform_disabled_commands:                # per-platform overrides
+#     telegram: ["model"]
+#     discord: ["fast"]
+
 # ─────────────────────────────────────────────────────────────────────────────
 # Available toolsets (use these names in platform_toolsets or the toolsets list)
 #

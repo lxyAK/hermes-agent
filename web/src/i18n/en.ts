@@ -206,6 +206,7 @@ export const en: Translations = {
       memory: "Memory",
       compression: "Compression",
       security: "Security",
+      gateway: "Gateway",
       browser: "Browser",
       voice: "Voice",
       tts: "Text-to-Speech",

@@ -220,6 +220,16 @@ _SCHEMA_OVERRIDES: Dict[str, Dict[str, Any]] = {
         "description": "Reasoning effort for delegated subagents",
         "options": ["", "low", "medium", "high"],
     },
+    "gateway.disabled_commands": {
+        "type": "list",
+        "description": "Globally disabled slash commands (e.g. yolo, fast)",
+        "category": "gateway",
+    },
+    "gateway.platform_disabled_commands": {
+        "type": "map_list",
+        "description": "Per-platform disabled commands (e.g. telegram: model, discord: yolo)",
+        "category": "gateway",
+    },
 }
 
 # Categories with fewer fields get merged into "general" to avoid tab sprawl.
@@ -239,7 +249,7 @@ _CATEGORY_MERGE: Dict[str, str] = {
 # Display order for tabs — unlisted categories sort alphabetically after these.
 _CATEGORY_ORDER = [
     "general", "agent", "terminal", "display", "delegation",
-    "memory", "compression", "security", "browser", "voice",
+    "memory", "compression", "security", "gateway", "browser", "voice",
     "tts", "stt", "logging", "discord", "auxiliary",
 ]
 
@@ -281,7 +291,7 @@ def _build_schema_from_config(
         else:
             category = "general"
 
-        if isinstance(value, dict):
+        if isinstance(value, dict) and full_key not in _SCHEMA_OVERRIDES:
             # Recurse into nested dicts
             schema.update(_build_schema_from_config(value, full_key))
         else:
